@@ -14,21 +14,17 @@ The dataset used in this example is a preprocessed excerpt of the
 
 """
 
-
-
-print __doc__
+print( __doc__)
 
 from time import time
 import logging
 import pylab as pl
 import numpy as np
 
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.datasets import fetch_lfw_people
-from sklearn.grid_search import GridSearchCV
-from sklearn.metrics import classification_report
-from sklearn.metrics import confusion_matrix
-from sklearn.decomposition import RandomizedPCA
+from sklearn.decomposition import PCA
 from sklearn.svm import SVC
 
 # Display progress logs on stdout
@@ -56,7 +52,7 @@ n_classes = target_names.shape[0]
 print("Total dataset size:")
 print("n_samples: %d" % n_samples)
 print("n_features: %d" % n_features)
-print("n_classes: %d" % n_classes)(
+print("n_classes: %d" % n_classes)
 
 ###############################################################################
 # Split into a training and testing set
@@ -69,7 +65,7 @@ n_components = 150
 
 print("Extracting the top %d eigenfaces from %d faces" % (n_components, X_train.shape[0]))
 t0 = time()
-pca = RandomizedPCA(n_components=n_components, whiten=True).fit(X_train)
+pca = PCA(n_components=n_components, whiten=True).fit(X_train)
 print("done in %0.3fs" % (time() - t0))
 
 eigenfaces = pca.components_.reshape((n_components, h, w))
@@ -95,6 +91,7 @@ clf = clf.fit(X_train_pca, y_train)
 print("done in %0.3fs" % (time() - t0))
 print("Best estimator found by grid search:")
 print(clf.best_estimator_)
+print(clf.best_params_)
 
 
 ###############################################################################
@@ -142,3 +139,7 @@ eigenface_titles = ["eigenface %d" % i for i in range(eigenfaces.shape[0])]
 plot_gallery(eigenfaces, eigenface_titles, h, w)
 
 pl.show()
+
+
+
+# print(pca.explained_variance_ratio_)
