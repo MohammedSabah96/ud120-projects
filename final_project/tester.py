@@ -13,7 +13,7 @@
 from feature_format import featureFormat, targetFeatureSplit
 import pickle
 import sys
-from sklearn.cross_validation import StratifiedShuffleSplit
+from sklearn.model_selection import StratifiedShuffleSplit
 sys.path.append("../tools/")
 
 PERF_FORMAT_STRING = "\
